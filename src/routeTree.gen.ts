@@ -4,83 +4,193 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { createServerRootRoute } from "@tanstack/react-start/server";
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as AppAccountImport } from "./routes/_app/account";
-import { Route as AppPostPostIdImport } from "./routes/_app/post.$postId";
-import { Route as AppRouteImport } from "./routes/_app/route";
-import { Route as IndexImport } from "./routes/index";
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as AppauthAccountRouteImport } from "./routes/_app/(auth)/account";
+import { Route as AppauthRouteRouteImport } from "./routes/_app/(auth)/route";
+import { Route as AppPostPostIdRouteImport } from "./routes/_app/post.$postId";
+import { Route as AppRouteRouteImport } from "./routes/_app/route";
+import { ServerRoute as ApiAuthSplatServerRouteImport } from "./routes/api/auth.$";
+import { ServerRoute as ApiTrpcSplatServerRouteImport } from "./routes/api/trpc.$";
+import { Route as IndexRouteImport } from "./routes/index";
 
-// Create/Update Routes
+const rootServerRouteImport = createServerRootRoute();
 
-const AppRouteRoute = AppRouteImport.update({
+const AppRouteRoute = AppRouteRouteImport.update({
 	id: "/_app",
-	getParentRoute: () => rootRoute,
+	getParentRoute: () => rootRouteImport,
 } as any);
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => rootRoute,
+	getParentRoute: () => rootRouteImport,
 } as any);
-
-const AppAccountRoute = AppAccountImport.update({
-	id: "/account",
-	path: "/account",
+const AppauthRouteRoute = AppauthRouteRouteImport.update({
+	id: "/(auth)",
 	getParentRoute: () => AppRouteRoute,
 } as any);
-
-const AppPostPostIdRoute = AppPostPostIdImport.update({
+const AppPostPostIdRoute = AppPostPostIdRouteImport.update({
 	id: "/post/$postId",
 	path: "/post/$postId",
 	getParentRoute: () => AppRouteRoute,
 } as any);
+const AppauthAccountRoute = AppauthAccountRouteImport.update({
+	id: "/account",
+	path: "/account",
+	getParentRoute: () => AppauthRouteRoute,
+} as any);
+const ApiTrpcSplatServerRoute = ApiTrpcSplatServerRouteImport.update({
+	id: "/api/trpc/$",
+	path: "/api/trpc/$",
+	getParentRoute: () => rootServerRouteImport,
+} as any);
+const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
+	id: "/api/auth/$",
+	path: "/api/auth/$",
+	getParentRoute: () => rootServerRouteImport,
+} as any);
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+	"/": typeof AppauthRouteRouteWithChildren;
+	"": typeof AppRouteRouteWithChildren;
+	"/account": typeof AppauthAccountRoute;
+	"/post/$postId": typeof AppPostPostIdRoute;
+}
+export interface FileRoutesByTo {
+	"/": typeof AppauthRouteRouteWithChildren;
+	"/account": typeof AppauthAccountRoute;
+	"/post/$postId": typeof AppPostPostIdRoute;
+}
+export interface FileRoutesById {
+	__root__: typeof rootRouteImport;
+	"/": typeof IndexRoute;
+	"/_app": typeof AppRouteRouteWithChildren;
+	"/_app/(auth)": typeof AppauthRouteRouteWithChildren;
+	"/_app/(auth)/account": typeof AppauthAccountRoute;
+	"/_app/post/$postId": typeof AppPostPostIdRoute;
+}
+export interface FileRouteTypes {
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths: "/" | "" | "/account" | "/post/$postId";
+	fileRoutesByTo: FileRoutesByTo;
+	to: "/" | "/account" | "/post/$postId";
+	id:
+		| "__root__"
+		| "/"
+		| "/_app"
+		| "/_app/(auth)"
+		| "/_app/(auth)/account"
+		| "/_app/post/$postId";
+	fileRoutesById: FileRoutesById;
+}
+export interface RootRouteChildren {
+	IndexRoute: typeof IndexRoute;
+	AppRouteRoute: typeof AppRouteRouteWithChildren;
+}
+export interface FileServerRoutesByFullPath {
+	"/api/auth/$": typeof ApiAuthSplatServerRoute;
+	"/api/trpc/$": typeof ApiTrpcSplatServerRoute;
+}
+export interface FileServerRoutesByTo {
+	"/api/auth/$": typeof ApiAuthSplatServerRoute;
+	"/api/trpc/$": typeof ApiTrpcSplatServerRoute;
+}
+export interface FileServerRoutesById {
+	__root__: typeof rootServerRouteImport;
+	"/api/auth/$": typeof ApiAuthSplatServerRoute;
+	"/api/trpc/$": typeof ApiTrpcSplatServerRoute;
+}
+export interface FileServerRouteTypes {
+	fileServerRoutesByFullPath: FileServerRoutesByFullPath;
+	fullPaths: "/api/auth/$" | "/api/trpc/$";
+	fileServerRoutesByTo: FileServerRoutesByTo;
+	to: "/api/auth/$" | "/api/trpc/$";
+	id: "__root__" | "/api/auth/$" | "/api/trpc/$";
+	fileServerRoutesById: FileServerRoutesById;
+}
+export interface RootServerRouteChildren {
+	ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute;
+	ApiTrpcSplatServerRoute: typeof ApiTrpcSplatServerRoute;
+}
 
 declare module "@tanstack/react-router" {
 	interface FileRoutesByPath {
-		"/": {
-			id: "/";
-			path: "/";
-			fullPath: "/";
-			preLoaderRoute: typeof IndexImport;
-			parentRoute: typeof rootRoute;
-		};
 		"/_app": {
 			id: "/_app";
 			path: "";
 			fullPath: "";
-			preLoaderRoute: typeof AppRouteImport;
-			parentRoute: typeof rootRoute;
+			preLoaderRoute: typeof AppRouteRouteImport;
+			parentRoute: typeof rootRouteImport;
 		};
-		"/_app/account": {
-			id: "/_app/account";
-			path: "/account";
-			fullPath: "/account";
-			preLoaderRoute: typeof AppAccountImport;
-			parentRoute: typeof AppRouteImport;
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/_app/(auth)": {
+			id: "/_app/(auth)";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof AppauthRouteRouteImport;
+			parentRoute: typeof AppRouteRoute;
 		};
 		"/_app/post/$postId": {
 			id: "/_app/post/$postId";
 			path: "/post/$postId";
 			fullPath: "/post/$postId";
-			preLoaderRoute: typeof AppPostPostIdImport;
-			parentRoute: typeof AppRouteImport;
+			preLoaderRoute: typeof AppPostPostIdRouteImport;
+			parentRoute: typeof AppRouteRoute;
+		};
+		"/_app/(auth)/account": {
+			id: "/_app/(auth)/account";
+			path: "/account";
+			fullPath: "/account";
+			preLoaderRoute: typeof AppauthAccountRouteImport;
+			parentRoute: typeof AppauthRouteRoute;
+		};
+	}
+}
+declare module "@tanstack/react-start/server" {
+	interface ServerFileRoutesByPath {
+		"/api/trpc/$": {
+			id: "/api/trpc/$";
+			path: "/api/trpc/$";
+			fullPath: "/api/trpc/$";
+			preLoaderRoute: typeof ApiTrpcSplatServerRouteImport;
+			parentRoute: typeof rootServerRouteImport;
+		};
+		"/api/auth/$": {
+			id: "/api/auth/$";
+			path: "/api/auth/$";
+			fullPath: "/api/auth/$";
+			preLoaderRoute: typeof ApiAuthSplatServerRouteImport;
+			parentRoute: typeof rootServerRouteImport;
 		};
 	}
 }
 
-// Create and export the route tree
+interface AppauthRouteRouteChildren {
+	AppauthAccountRoute: typeof AppauthAccountRoute;
+}
+
+const AppauthRouteRouteChildren: AppauthRouteRouteChildren = {
+	AppauthAccountRoute: AppauthAccountRoute,
+};
+
+const AppauthRouteRouteWithChildren = AppauthRouteRoute._addFileChildren(
+	AppauthRouteRouteChildren,
+);
 
 interface AppRouteRouteChildren {
-	AppAccountRoute: typeof AppAccountRoute;
+	AppauthRouteRoute: typeof AppauthRouteRouteWithChildren;
 	AppPostPostIdRoute: typeof AppPostPostIdRoute;
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-	AppAccountRoute: AppAccountRoute,
+	AppauthRouteRoute: AppauthRouteRouteWithChildren,
 	AppPostPostIdRoute: AppPostPostIdRoute,
 };
 
@@ -88,79 +198,17 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 	AppRouteRouteChildren,
 );
 
-export interface FileRoutesByFullPath {
-	"/": typeof IndexRoute;
-	"": typeof AppRouteRouteWithChildren;
-	"/account": typeof AppAccountRoute;
-	"/post/$postId": typeof AppPostPostIdRoute;
-}
-
-export interface FileRoutesByTo {
-	"/": typeof IndexRoute;
-	"": typeof AppRouteRouteWithChildren;
-	"/account": typeof AppAccountRoute;
-	"/post/$postId": typeof AppPostPostIdRoute;
-}
-
-export interface FileRoutesById {
-	__root__: typeof rootRoute;
-	"/": typeof IndexRoute;
-	"/_app": typeof AppRouteRouteWithChildren;
-	"/_app/account": typeof AppAccountRoute;
-	"/_app/post/$postId": typeof AppPostPostIdRoute;
-}
-
-export interface FileRouteTypes {
-	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths: "/" | "" | "/account" | "/post/$postId";
-	fileRoutesByTo: FileRoutesByTo;
-	to: "/" | "" | "/account" | "/post/$postId";
-	id: "__root__" | "/" | "/_app" | "/_app/account" | "/_app/post/$postId";
-	fileRoutesById: FileRoutesById;
-}
-
-export interface RootRouteChildren {
-	IndexRoute: typeof IndexRoute;
-	AppRouteRoute: typeof AppRouteRouteWithChildren;
-}
-
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
 	AppRouteRoute: AppRouteRouteWithChildren,
 };
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
 	._addFileChildren(rootRouteChildren)
 	._addFileTypes<FileRouteTypes>();
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_app"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_app": {
-      "filePath": "_app/route.tsx",
-      "children": [
-        "/_app/account",
-        "/_app/post/$postId"
-      ]
-    },
-    "/_app/account": {
-      "filePath": "_app/account.tsx",
-      "parent": "/_app"
-    },
-    "/_app/post/$postId": {
-      "filePath": "_app/post.$postId.tsx",
-      "parent": "/_app"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
+const rootServerRouteChildren: RootServerRouteChildren = {
+	ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+	ApiTrpcSplatServerRoute: ApiTrpcSplatServerRoute,
+};
+export const serverRouteTree = rootServerRouteImport
+	._addFileChildren(rootServerRouteChildren)
+	._addFileTypes<FileServerRouteTypes>();

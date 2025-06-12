@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	createRootRouteWithContext,
@@ -6,7 +7,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import * as React from "react";
+import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
 import type { AppContext } from "~/router";
 import stylesheetUrl from "~/styles/app.css?url";
@@ -45,7 +46,7 @@ function RootComponent() {
 	);
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" className="h-full bg-gray-100">
 			<head>

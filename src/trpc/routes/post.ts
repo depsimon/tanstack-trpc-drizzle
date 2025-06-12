@@ -21,18 +21,15 @@ export const postsRouter = {
 
 			return results[0];
 		}),
-	// Fetching a specific post is protected, for the sake of the demo
-	postById: protectedProcedure
-		.input(type("string"))
-		.query(async ({ input }) => {
-			const results = await db.select().from(posts).where(eq(posts.id, input));
+	postById: publicProcedure.input(type("string")).query(async ({ input }) => {
+		const results = await db.select().from(posts).where(eq(posts.id, input));
 
-			if (results.length === 0) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
+		if (results.length === 0) {
+			throw new TRPCError({ code: "NOT_FOUND" });
+		}
 
-			return results[0];
-		}),
+		return results[0];
+	}),
 	postList: publicProcedure.query(async () => {
 		return await db.select().from(posts).all();
 	}),

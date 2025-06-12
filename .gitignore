@@ -7,13 +7,13 @@ yarn.lock
 .env
 .vercel
 .output
-.vinxi
+.nitro
 
 /build/
 /api/
 /server/build
 /public/build
-.vinxi
+.tanstack
 # Sentry Config File
 .env.sentry-build-plugin
 /test-results/
